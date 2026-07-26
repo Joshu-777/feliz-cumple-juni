@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Juni</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Poppins:wght@300;400;500&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #150F2B;
+    --bg2: #1E1740;
+    --card: #241C4B;
+    --coral: #FF7597;
+    --lavender: #B7A6FF;
+    --yellow: #FFD166;
+    --text: #F3EEFF;
+    --text-dim: #B8AEDE;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+  .sky{
+    position: fixed; inset:0; z-index:-1;
+    background: radial-gradient(ellipse at top, #241C4B 0%, #150F2B 60%);
+  }
+  .cube{
+    position: absolute;
+    border-radius: 6px;
+    opacity: 0.25;
+    animation: float 8s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{ transform: translateY(0) rotate(0deg); }
+    50%{ transform: translateY(-24px) rotate(8deg); }
+  }
+  section{
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 80px 24px;
+    position: relative;
+  }
+
+  /* HERO */
+  .hero{ text-align:center; padding-top: 100px; }
+  .blocks-title{
+    display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-bottom: 28px;
+  }
+  .letter-block{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size: 44px;
+    width: 62px; height: 62px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius: 10px;
+    color: #1B1330;
+    opacity: 0;
+    transform: translateY(-40px) rotate(-8deg);
+    animation: drop 0.6s cubic-bezier(.34,1.56,.64,1) forwards;
+  }
+  @keyframes drop{ to{ opacity:1; transform:translateY(0) rotate(0deg); } }
+  .hero p.sub{
+    color: var(--text-dim);
+    font-size: 17px;
+    max-width: 420px;
+    margin: 0 auto 36px;
+  }
+  .countdown{
+    display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+  }
+  .cd-item{
+    background: var(--card);
+    border-radius: 12px;
+    padding: 16px 18px;
+    min-width: 74px;
+  }
+  .cd-num{ font-family:'Baloo 2',sans-serif; font-size:28px; font-weight:700; color: var(--yellow); }
+  .cd-label{ font-size: 11px; color: var(--text-dim); text-transform:uppercase; letter-spacing:0.06em; margin-top:4px; }
+
+  /* SECTION HEADERS */
+  h2.section-title{
+    font-family:'Baloo 2', sans-serif;
+    font-size: 26px;
+    text-align:center;
+    margin-bottom: 8px;
+  }
+  p.section-sub{
+    text-align:center;
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-bottom: 40px;
+  }
+
+  /* BLOCK CHEST */
+  .chest-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .chest-block{
+    aspect-ratio: 1;
+    perspective: 600px;
+    cursor:pointer;
+  }
+  .chest-inner{
+    position:relative; width:100%; height:100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+  .chest-block.open .chest-inner{ transform: rotateY(180deg); }
+  .chest-face{
+    position:absolute; inset:0;
+    border-radius: 12px;
+    display:flex; align-items:center; justify-content:center;
+    backface-visibility: hidden;
+    padding: 10px;
+    text-align:center;
+  }
+  .chest-front{
+    background: linear-gradient(160deg, var(--lavender), var(--coral));
+    font-family:'Baloo 2',sans-serif;
+    font-size: 28px;
+    color: #1B1330;
+  }
+  .chest-back{
+    background: var(--card);
+    transform: rotateY(180deg);
+    font-size: 12.5px;
+    line-height:1.5;
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .progress-wrap{
+    margin-top: 28px;
+    text-align:center;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+  .progress-bar{
+    height:6px; background: rgba(255,255,255,0.08); border-radius:4px; margin-top:8px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; width:0%; background: var(--yellow); transition: width 0.4s;
+  }
+
+  /* LETTER */
+  .letter-wrap{
+    background: var(--card);
+    border-radius: 20px;
+    padding: 48px 40px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .letter-wrap.show{ opacity:1; transform:translateY(0); }
+  .letter-wrap p{
+    font-family: 'Caveat', cursive;
+    font-size: 24px;
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .letter-wrap p.sign{
+    text-align:right;
+    font-size: 26px;
+    color: var(--coral);
+    margin-top: 24px;
+  }
+  .locked-msg{
+    text-align:center;
+    color: var(--text-dim);
+    font-size: 14px;
+    padding: 30px 0;
+  }
+  .locked-msg .heart{ color: var(--coral); }
+
+  .deco-img{
+    display:block;
+    max-width: 220px;
+    width: 60%;
+    margin: 0 auto 28px;
+    border-radius: 14px;
+  }
+  .letter-flower{
+    max-width: 200px;
+    margin: 0 auto 24px;
+    display:block;
+    border-radius: 14px;
+  }
+  .footer-meme{
+    max-width: 180px;
+    margin: 18px auto 0;
+    display:block;
+    border-radius: 12px;
+    opacity: 0.9;
+  }
+
+  .toast{
+    position: fixed;
+    left: 50%; bottom: 24px;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    color: var(--text);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 10;
+    max-width: 88%;
+    text-align:center;
+  }
+  .toast.show{ opacity:1; transform: translateX(-50%) translateY(0); }
+
+  .chest-front.locked{
+    background: linear-gradient(160deg, #3A3266, #2A2352);
+  }
+  .chest-front img.lock-icon{
+    width: 34px; height:34px; border-radius:8px; object-fit:cover;
+  }
+  .chest-block.locked{ cursor: default; }
+
+  footer{
+    text-align:center;
+    padding: 40px 24px 70px;
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  .surprise-locked{
+    background: var(--card);
+    border-radius: 20px;
+    padding: 44px 24px;
+    text-align:center;
+  }
+  .surprise-locked .lock-cube{
+    width: 72px; height:72px; margin: 0 auto 16px;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+  .surprise-locked p{ color: var(--text-dim); font-size: 14px; }
+  .surprise-video{
+    background: var(--card);
+    border-radius: 20px;
+    padding: 24px;
+    text-align:center;
+    opacity:0;
+    transform: translateY(20px);
+    animation: revealVideo 0.8s ease forwards;
+  }
+  @keyframes revealVideo{ to{ opacity:1; transform:translateY(0); } }
+  .surprise-video video{
+    width:100%; border-radius: 14px; display:block;
+  }
+  .surprise-video p{
+    font-family:'Caveat', cursive;
+    font-size: 22px;
+    color: var(--coral);
+    margin-top: 14px;
+  }
+
+  @media (max-width: 480px){
+    .letter-block{ width:48px; height:48px; font-size:32px; }
+    .letter-wrap{ padding: 32px 22px; }
+    .letter-wrap p{ font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sky" id="sky"></div>
+
+<section class="hero">
+  <img src="mensaje.jpg" alt="" class="deco-img">
+  <div class="blocks-title" id="titleBlocks"></div>
+  <p class="sub">Un pequeño mundo de bloques, construido para ti a la distancia.</p>
+  <div class="countdown" id="countdown"></div>
+</section>
+
+<section>
+  <h2 class="section-title">Abre los bloques</h2>
+  <p class="section-sub">Un bloque nuevo se desbloquea cada día. Sé que te va a picar la curiosidad, pero no se puede abrir todo junto hasta el día de tu cumple.</p>
+  <div class="chest-grid" id="chestGrid"></div>
+  <div class="progress-wrap">
+    <span id="progressText">0 / 9 bloques abiertos</span>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+</section>
+
+<section>
+  <h2 class="section-title">Tu carta</h2>
+  <img src="flower.jpg" alt="" class="letter-flower">
+  <div id="letterArea"></div>
+</section>
+
+<section>
+  <h2 class="section-title">Sorpresa final</h2>
+  <p class="section-sub" id="surpriseSub">Este bloque se abre solo el día de tu cumpleaños.</p>
+  <div id="surpriseArea"></div>
+</section>
+
+<footer>
+  hecho con demasiados bloques y cariño, para Juni.
+  <img src="cap.jpg" alt="" class="footer-meme">
+</footer>
+
+<script>
+  // ambient floating cubes
+  const colors = ['#FF7597','#B7A6FF','#FFD166'];
+  const sky = document.getElementById('sky');
+  for(let i=0;i<18;i++){
+    const c = document.createElement('div');
+    c.className = 'cube';
+    const size = 14 + Math.random()*26;
+    c.style.width = size+'px';
+    c.style.height = size+'px';
+    c.style.left = Math.random()*100+'%';
+    c.style.top = Math.random()*100+'%';
+    c.style.background = colors[i % colors.length];
+    c.style.animationDelay = (Math.random()*6)+'s';
+    c.style.animationDuration = (6+Math.random()*6)+'s';
+    sky.appendChild(c);
+  }
+
+  // hero title blocks
+  const word = "JUNI";
+  const titleColors = ['#FF7597','#FFD166','#B7A6FF','#FF7597'];
+  const titleWrap = document.getElementById('titleBlocks');
+  [...word].forEach((letter, i)=>{
+    const b = document.createElement('div');
+    b.className = 'letter-block';
+    b.textContent = letter;
+    b.style.background = titleColors[i % titleColors.length];
+    b.style.animationDelay = (i*0.12)+'s';
+    titleWrap.appendChild(b);
+  });
+
+  // countdown to Aug 3
+  const target = new Date('2026-08-03T00:00:00');
+  const cdWrap = document.getElementById('countdown');
+  function renderCountdown(){
+    const now = new Date();
+    const diff = target - now;
+    if(diff <= 0){
+      cdWrap.innerHTML = '<div class="cd-item"><div class="cd-num">Hoy</div><div class="cd-label">Feliz cumpleaños</div></div>';
+      return;
+    }
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor((diff%86400000)/3600000);
+    const m = Math.floor((diff%3600000)/60000);
+    const items = [[d,'días'],[h,'horas'],[m,'min']];
+    cdWrap.innerHTML = items.map(([n,l])=>
+      `<div class="cd-item"><div class="cd-num">${n}</div><div class="cd-label">${l}</div></div>`
+    ).join('');
+  }
+  renderCountdown();
+  setInterval(renderCountdown, 30000);
+
+  // block chest messages -- edita estos textos si quieres personalizarlos mas
+  const messages = [
+    "¿Sabías que pensar en ti se volvió mi pasatiempo favorito?",
+    "Cada bloque de este mundo lo puse pensando en una sonrisa tuya.",
+    "España está lejos, pero mi cabeza viaja ahí todos los días.",
+    "Si fueras un bloque raro de encontrar, serías el más valioso de todos.",
+    "Gracias por darnos otra oportunidad. No la voy a desperdiciar.",
+    "Cuenta regresiva activada: modo hacerte reír todo el día.",
+    "Este mensaje se autodestruye en... nunca. Quiero que lo guardes.",
+    "Construir algo contigo, aunque sea una página web, se siente bien.",
+    "Feliz cumple, Juni. Este es solo el bloque número uno de muchos."
+  ];
+  // fechas de desbloqueo -- un bloque nuevo cada dia hasta el cumple
+  const unlockDates = [
+    '2026-07-26','2026-07-27','2026-07-28','2026-07-29',
+    '2026-07-30','2026-07-31','2026-08-01','2026-08-02','2026-08-03'
+  ].map(d => new Date(d+'T00:00:00'));
+
+  const teaseLines = [
+    "sabía que no ibas a resistir. te toca esperar un poquito más.",
+    "eh eh, con calma. este bloque todavía no es tuyo.",
+    "la curiosidad te puede, pero este bloque duerme hasta mañana.",
+    "casi, casi. pero no. vuelve mañana por este.",
+    "este bloque todavía está guardando su secreto.",
+    "paciencia, que lo bueno se hace esperar.",
+    "todavía no. pero admiro la insistencia.",
+    "este se abre solo, y todavía no le toca."
+  ];
+
+  const grid = document.getElementById('chestGrid');
+  let opened = 0;
+  const now0 = new Date();
+
+  messages.forEach((msg, i)=>{
+    const unlocked = now0 >= unlockDates[i];
+    const block = document.createElement('div');
+    block.className = 'chest-block' + (unlocked ? '' : ' locked');
+    const frontContent = unlocked
+      ? (i+1)
+      : `<img src="candado.jpg" alt="" class="lock-icon">`;
+    block.innerHTML = `
+      <div class="chest-inner">
+        <div class="chest-face chest-front${unlocked ? '' : ' locked'}">${frontContent}</div>
+        <div class="chest-face chest-back">${msg}</div>
+      </div>`;
+    block.addEventListener('click', ()=>{
+      if(!unlocked){
+        showToast(teaseLines[i % teaseLines.length]);
+        return;
+      }
+      if(!block.classList.contains('open')){
+        block.classList.add('open');
+        opened++;
+        updateProgress();
+      }
+    });
+    grid.appendChild(block);
+  });
+
+  function showToast(text){
+    let toast = document.getElementById('toast');
+    if(!toast){
+      toast = document.createElement('div');
+      toast.id = 'toast';
+      toast.className = 'toast';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = text;
+    toast.classList.add('show');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(()=> toast.classList.remove('show'), 2400);
+  }
+
+  function updateProgress(){
+    document.getElementById('progressText').textContent = `${opened} / 9 bloques abiertos`;
+    document.getElementById('progressFill').style.width = (opened/9*100)+'%';
+    checkLetterUnlock();
+  }
+
+  function revealLetter(){
+    const area = document.getElementById('letterArea');
+    area.innerHTML = `
+      <div class="letter-wrap" id="letterCard">
+        <p>Juni,</p>
+        <p>sé que no siempre fue fácil, y una parte de eso fue por mí. Pero también sé que a veces la vida aleja lo bueno para que aprendamos a cuidarlo mejor cuando vuelve. Y volviste. Volvimos.</p>
+        <p>Hoy solo quiero que sepas algo simple: me alegra que estés aquí, aunque sea a través de una pantalla y con un océano de por medio. Cada mensaje tuyo me alegra el día más de lo que te imaginas.</p>
+        <p>Y como sé que tu corazón tiene un rincón reservado para bloques cuadrados y mundos pixelados, pensé: ¿por qué no construirte algo con esos mismos bloques? Aquí tienes tu propio mundo, hecho con cariño (y muy poco talento para el pixel art, lo admito).</p>
+        <p>Feliz cumpleaños, Juni. Que este nuevo año te traiga muchísimas razones para sonreír, aunque sea a la distancia. Yo sigo aquí, con ganas de seguir construyendo cosas contigo, reales, virtuales, y de bloques.</p>
+        <p class="sign">— con cariño, y ganas de abrazarte pronto</p>
+      </div>`;
+    requestAnimationFrame(()=>{
+      document.getElementById('letterCard').classList.add('show');
+    });
+    area.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+
+  // sorpresa: se desbloquea el dia del cumple en adelante
+  const birthday = new Date('2026-08-03T00:00:00');
+  const nowCheck = new Date();
+
+  function checkLetterUnlock(){
+    const area = document.getElementById('letterArea');
+    if(opened === 9 && nowCheck >= birthday){
+      revealLetter();
+    } else if(opened === 9){
+      area.innerHTML = '<p class="locked-msg">Ya abriste los 9 bloques <span class="heart">&hearts;</span> pero esta carta es un regalo de cumpleaños de verdad, así que se abre completa el 3 de agosto. Un poquito más de paciencia.</p>';
+    } else {
+      area.innerHTML = '<p class="locked-msg">Abre los 9 bloques de arriba para desbloquearla.</p>';
+    }
+  }
+  checkLetterUnlock();
+  const surpriseArea = document.getElementById('surpriseArea');
+  const surpriseSub = document.getElementById('surpriseSub');
+  if(nowCheck >= birthday){
+    surpriseSub.textContent = 'Feliz cumpleaños, Juni.';
+    surpriseArea.innerHTML = `
+      <div class="surprise-video">
+        <video controls playsinline poster="candado.jpg">
+          <source src="felicidades.mp4" type="video/mp4">
+        </video>
+        <p>esto es para ti, hoy y siempre</p>
+      </div>`;
+  } else {
+    surpriseArea.innerHTML = `
+      <div class="surprise-locked">
+        <img src="candado.jpg" alt="" class="lock-cube">
+        <p>Vuelve el 3 de agosto para verlo. Va a valer la pena la espera.</p>
+      </div>`;
+  }
+</script>
+
+</body>
+</html>
